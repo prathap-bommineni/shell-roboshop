@@ -4,13 +4,13 @@ AMI_ID="ami-0220d79f3f480ecf5"
 
 for instance in $@
 do
-aws ec2 run-instances 
+Instance_id=$(aws ec2 run-instances \ 
     --image-id $AMI_ID \
-    --instance-type t3.micro \
+    --instance-type "t3.micro" \
     --security-gorup-ids $SG_ID
-    --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$Instance}]' \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$Instance}]" \
     --query 'Instances[0].InstanceId'\
-    --output text
+    --output text)
 
 if [$instance == "fronted" ]; then
     IP=$(
@@ -27,5 +27,5 @@ IP=$(
          --output text \
          )
 fi
-
+echo "IP Addres: $IP"
 done
